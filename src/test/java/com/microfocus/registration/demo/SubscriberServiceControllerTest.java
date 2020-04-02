@@ -21,7 +21,7 @@ import com.microfocus.registration.service.SubscriberService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SubscriberServiceController.class)
-public class ControllerTest2 {
+public class SubscriberServiceControllerTest {
 
 	@MockBean
 	private SubscriberService subscriberService;

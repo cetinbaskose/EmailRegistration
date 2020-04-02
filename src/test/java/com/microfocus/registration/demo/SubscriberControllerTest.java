@@ -1,11 +1,9 @@
 package com.microfocus.registration.demo;
 
-import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.hamcrest.core.StringContains.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,38 +12,33 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.microfocus.registration.controller.SubscriberServiceController;
-import com.microfocus.registration.entity.Subscriber;
 import com.microfocus.registration.service.SubscriberService;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SubscriberServiceController.class)
-public class ControllerTest {
+public class SubscriberControllerTest {
 
 	@MockBean
 	private SubscriberService subscriberService;
 
 	@Autowired
-	private MockMvc mocMvc;
+	private MockMvc mockMvc;
 
 	@Test
-	public void test() throws Exception {
+	public void givenHomePageURI_whenMockMVC_thenReturnsIndexViewName() throws Exception {
+		this.mockMvc.perform(get("/")).andDo(print())
+				.andExpect(view().name("forward:index.html"));
+	}
 
-		List<Subscriber> mockSubscriberList = new ArrayList<>();
-		Subscriber subscriber = new Subscriber();
-		subscriber.setId(1);
-		subscriber.setName("Cetin Baskose");
-		subscriber.setEmailAddress("cetinbaskose@somemail.com");
-
-		mockSubscriberList.add(subscriber);
-
-		when(subscriberService.getAllSubscribers()).thenReturn(mockSubscriberList);
-
-		this.mocMvc.perform(get("/api/subscribers")).andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(1))
-				.andExpect(jsonPath("$[0].name").value("Cetin Baskose"))
-				.andExpect(jsonPath("$[0].emailAddress").value("cetinbaskose@somemail.com"));
+	@Test
+	public void shouldReturnDefaultMessage() throws Exception {
+		this.mockMvc.perform(get("/index.html")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Welcome to the Mail Subscription Page")));
 
 	}
+	
+
 
 }

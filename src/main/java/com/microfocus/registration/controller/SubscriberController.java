@@ -21,6 +21,7 @@ public class SubscriberController {
 	@GetMapping(value = "/")
 	public String defaultPage(Model model, Subscriber subscriber) {
 		model.addAttribute("subscribers", subscriberService.getAllSubscribers());
+		model.addAttribute("msg", "SUCCESS");
 		return "index";
 	}
 
